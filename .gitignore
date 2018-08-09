@@ -1,0 +1,16 @@
+# OS
+.DS_Store
+
+# lib
+node_modules
+
+# IDE
+.idea
+
+# build
+*.js
+*.js.map
+
+# test
+.nyc_output
+coverage

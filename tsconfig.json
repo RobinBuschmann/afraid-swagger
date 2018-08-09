@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "sourceMap": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "pretty": true
+  },
+  "include": [
+    "lib",
+    "build",
+    "test",
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "test/typings"
+  ]
+}
