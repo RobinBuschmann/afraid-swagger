@@ -13,12 +13,9 @@
   },
   "include": [
     "lib",
-    "build",
-    "test",
     "index.ts"
   ],
   "exclude": [
-    "node_modules",
-    "test/typings"
+    "node_modules"
   ]
 }

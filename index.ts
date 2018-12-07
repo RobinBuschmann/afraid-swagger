@@ -1,8 +1,11 @@
+///<reference path="lib/afraid-extension.d.ts"/>
+
 import * as express from 'express';
 import {Router} from 'express';
 import {body, f, Field, params, query} from 'afraid';
 import {swagger} from './lib/swagger';
 import {createServer} from 'http';
+import {responseBody, responseHeaders} from './lib/meta/middlewares';
 
 const app = express();
 const handler = (_, res) => res.sendStatus(200);
@@ -12,6 +15,17 @@ class UpdateUserDTO {
     @Field birthday: Date;
 }
 
+class NewUserDTO {
+    @Field id: string;
+    @Field name: string;
+    @Field birthday: Date;
+}
+
+app.use('/api-docs', swagger({
+    title: 'afraid-swagger',
+    version: '1.0',
+}));
+
 app.get('/users', [
     query(
         f('limit').int().opt(),
@@ -20,12 +34,27 @@ app.get('/users', [
     ),
 ], handler);
 app.get('/users/:id', [params(f('id').int())], handler);
+
 app.post('/users', [
-    body(
-        f('name').string(),
-        f('age').int(),
-    ),
-], handler);
+        body(
+            f('name').string(),
+            f('age').int(),
+        ),
+        responseBody(
+            f('id').string(),
+            f('name').string(),
+            f('age').int(),
+        ).httpCode(200),
+        responseHeaders(
+            f('X-Auth-Header').string()
+                .description('Auth token')
+        ).httpCode(200),
+    ],
+    (req, res, next) => {
+
+    });
+
+
 app.put('/users/:id', [
     params(f('id').int()),
     body(UpdateUserDTO),
@@ -38,10 +67,8 @@ friends.post('/friends', handler);
 
 app.use(friends);
 
-// app.use('/api-docs', serve, setup(document));
-app.use('/api-docs', swagger(app, {
-    title: 'express-transformer-swagger',
-    version: '1.0',
-}));
+app.use((err, req, res, next) => {
+   res.send(err);
+});
 
 createServer(app).listen(3000, () => console.log('server runs'));

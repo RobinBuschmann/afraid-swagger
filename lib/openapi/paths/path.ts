@@ -1,9 +1,9 @@
 import {OpenAPIParameter, toOpenAPIParameters} from './parameter';
-import {OpenAPIResponses} from './response';
+import {OpenAPIResponses, toOpenAPIResponses} from './response';
 import {OpenAPIRequestBody, toOpenAPIRequestBody} from './request-body';
 import {ExpressRoute} from '../../express/types';
 import {capitalize} from '../../common/string';
-import {getOpenAPIComponentRef, OpenAPIComponents} from '../components/components';
+import {getOpenAPIComponentRef} from '../components/components';
 import {getExpressRouteParamRegex} from '../../express/routes';
 import {toRefJSONSchema} from '../../json-schema/json-schema';
 import {toOpenAPIContent} from './content';
@@ -33,14 +33,10 @@ export const toOpenAPIPaths = (routes: ExpressRoute[]): OpenAPIPaths =>
             };
             const meta = layer.handle.meta;
             if (meta) {
-                if (meta.field === 'body') {
-                    const jsonSchema = toOpenAPIContent(toRefJSONSchema(getOpenAPIComponentRef(route.path, layer.method)));
-                    method.requestBody = {
-                        ...(method.requestBody || {}),
-                        ...toOpenAPIRequestBody(meta, jsonSchema),
-                    };
-                } else if(meta.field.startsWith('response')) {
-                    // Todo
+                if(meta.field === 'body') {
+                    method.requestBody = toOpenAPIRequestBody(route, layer, meta, method.requestBody);
+                } else if (meta.field.startsWith('response')) {
+                    method.responses = toOpenAPIResponses(route, layer, meta, method.responses);
                 } else {
                     method.parameters = [
                         ...(method.parameters || []),

@@ -44,41 +44,6 @@ export interface ArrayJSONSchema extends BaseJSONSchema {
     items: JSONSchema;
 }
 
-const toJSONSchemaTypeFormat = (meta: FieldMeta) => {
-    const metaType = meta.type;
-    let jsonSchemaTypeFormat;
-    switch (metaType) {
-        case FieldType.date:
-            jsonSchemaTypeFormat = {type: 'string', format: 'date-time'};
-            break;
-        case FieldType.float:
-            jsonSchemaTypeFormat = {type: 'number', format: 'float'};
-            break;
-        case FieldType.int:
-            jsonSchemaTypeFormat = {type: 'integer', format: 'int32'};
-            break;
-        case FieldType.boolean:
-            jsonSchemaTypeFormat = {type: 'boolean'};
-            break;
-        case FieldType.string:
-            jsonSchemaTypeFormat = {type: 'string'};
-            break;
-        case FieldType.object:
-            jsonSchemaTypeFormat = {
-                type: 'object',
-                properties: meta.fields ? toJSONSchemaProperties(meta.fields) : {},
-                required: meta.fields ? toJSONSchemaRequiredList(meta.fields) : {},
-            };
-            break;
-        default:
-            throw new Error(`Unknown meta type "${metaType}"`);
-    }
-
-    return meta.isArray
-        ? {type: 'array', items: jsonSchemaTypeFormat}
-        : jsonSchemaTypeFormat;
-};
-
 const toJSONSchemaProperties = (meta: FieldMeta[]) =>
     meta.reduce((properties, meta) => {
         properties[meta.field] = toJSONSchema(meta);
@@ -91,9 +56,40 @@ const toJSONSchemaRequiredList = (meta: FieldMeta[]) =>
         .map(({field}) => field);
 
 export const toJSONSchema = (meta: FieldMeta) => {
-    return {
-        ...toJSONSchemaTypeFormat(meta),
+    const metaType = meta.type;
+    const descriptionsWrapper = meta.description ? {description:meta.description} : {};
+    let schema;
+    switch (metaType) {
+        case FieldType.date:
+            schema = {type: 'string', format: 'date-time'};
+            break;
+        case FieldType.float:
+            schema = {type: 'number', format: 'float'};
+            break;
+        case FieldType.int:
+            schema = {type: 'integer', format: 'int32'};
+            break;
+        case FieldType.boolean:
+            schema = {type: 'boolean'};
+            break;
+        case FieldType.string:
+            schema = {type: 'string'};
+            break;
+        case FieldType.object:
+            schema = {
+                type: 'object',
+                properties: meta.fields ? toJSONSchemaProperties(meta.fields) : {},
+                required: meta.fields ? toJSONSchemaRequiredList(meta.fields) : {},
+            };
+            break;
+        default:
+            throw new Error(`Unknown meta type "${metaType}"`);
     }
+    schema = {...schema, ...descriptionsWrapper};
+
+    return meta.isArray
+        ? {type: 'array', items: schema}
+        : schema;
 };
 
 export const toRefJSONSchema = $ref => ({$ref});

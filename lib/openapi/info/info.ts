@@ -5,11 +5,11 @@ export interface OpenAPIInfo {
     termsOfService?: string;
     contact?: {
         name: string;
-        email: string;
-        url: string;
+        email?: string;
+        url?: string;
     },
     license?: {
         name: string;
-        url: string;
+        url?: string;
     }
 }
