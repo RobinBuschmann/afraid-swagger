@@ -29,6 +29,9 @@ export const toOpenAPIComponents = (routes: ExpressRoute[]) => {
 };
 
 export const toOpenAPIComponentName = (path: string, method: string, meta: FieldMeta) => {
+    if (meta.classRef && meta.classRef.name) {
+        return meta.classRef.name;
+    }
     const methodMap = {
         post: 'create',
         put: 'update',

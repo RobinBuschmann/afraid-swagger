@@ -15,7 +15,7 @@ class UpdateUserDTO {
     @Field birthday: Date;
 }
 
-class NewUserDTO {
+class UserDTO {
     @Field id: string;
     @Field name: string;
     @Field birthday: Date;
@@ -32,6 +32,7 @@ app.get('/users', [
         f('offset').int().opt(),
         f('filters').string().array().opt(),
     ),
+    responseBody(UserDTO).array(),
 ], handler);
 app.get('/users/:id', [params(f('id').int())], handler);
 
