@@ -12,7 +12,8 @@
   "types": "index.d.ts",
   "scripts": {
     "test": "mocha",
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm test && npm run build"
   },
   "author": "Robin Baum",
   "license": "ISC",
