@@ -1,0 +1,8 @@
+.DS_Store
+.idea
+.travis.yml
+test
+node_modules
+*.ts
+*.js.map
+!*.d.ts
