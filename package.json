@@ -16,12 +16,15 @@
   },
   "author": "Robin Baum",
   "license": "ISC",
+  "peerDependencies": {
+    "afraid": "*"
+  },
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.5",
     "@types/supertest": "^2.0.7",
-    "afraid": "^1.0.0-alpha.6",
+    "afraid": "^1.0.0-alpha.7",
     "chai": "^4.2.0",
     "class-transformer": "^0.1.9",
     "express": "^4.16.3",
