@@ -18,7 +18,7 @@ import * as express from 'express';
 
 const app = express();
 
-app.use('/api-docs', swagger({version: '1.0', title: 'API Docs'}));
+app.use('/api-docs', swagger({version: '1.0', title: 'API Docs'})); // 🎉
 
 app.get('/users', [
     query(
@@ -71,7 +71,7 @@ class UserDTO {
     @IsInt() @Field age: number;
 }
 
-app.use('/api-docs', swagger({version: '2.0', title: 'API Docs'}));
+app.use('/api-docs', swagger({version: '2.0', title: 'API Docs'}));  // 🎉
 
 app.post('/users', [
     body(CreateUserDTO),
