@@ -7,7 +7,7 @@ import {Router} from 'express';
 export const swagger = (info: OpenAPIInfo) => {
     const createAndServe = (app) => {
         const routes = getExpressRoutes(app);
-        const document = toOpenAPIDocument(app, info, routes);
+        const document = toOpenAPIDocument(info, routes);
         return [...(serve as any), setup(document)];
     };
     let isSetup = false;

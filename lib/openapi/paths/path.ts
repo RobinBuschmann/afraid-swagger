@@ -3,10 +3,7 @@ import {OpenAPIResponses, toOpenAPIResponses} from './response';
 import {OpenAPIRequestBody, toOpenAPIRequestBody} from './request-body';
 import {ExpressRoute} from '../../express/types';
 import {capitalize} from '../../common/string';
-import {getOpenAPIComponentRef} from '../components/components';
 import {getExpressRouteParamRegex} from '../../express/routes';
-import {toRefJSONSchema} from '../../json-schema/json-schema';
-import {toOpenAPIContent} from './content';
 
 export interface OpenAPIMethod {
     operationId: string;
@@ -29,7 +26,7 @@ export const toOpenAPIPaths = (routes: ExpressRoute[]): OpenAPIPaths =>
         const path = paths[getOpenAPIPath(route.path)] = paths[getOpenAPIPath(route.path)] || {};
         route.stack.forEach(layer => {
             const method = path[layer.method] = path[layer.method] || {
-                operatorId: getOpenAPIOperatorId(route.path, layer.method),
+                operatorId: getOpenAPIOperatorId(layer.method, route.path),
             };
             const meta = layer.handle.meta;
             if (meta) {

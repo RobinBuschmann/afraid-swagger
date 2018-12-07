@@ -3,7 +3,6 @@ import {OpenAPIPaths, toOpenAPIPaths} from './paths/path';
 import {OpenAPIComponents, toOpenAPIComponents} from './components/components';
 import {OpenAPIInfo} from './info/info';
 import {ExpressRoute} from '../express/types';
-import {Application} from 'express';
 
 export interface OpenAPIDocument {
     openapi: "3.0.0",
@@ -13,8 +12,7 @@ export interface OpenAPIDocument {
     components: OpenAPIComponents;
 }
 
-export const toOpenAPIDocument = (app: Application,
-                                  info: OpenAPIInfo,
+export const toOpenAPIDocument = (info: OpenAPIInfo,
                                   routes: ExpressRoute[]): OpenAPIDocument => {
     const components = toOpenAPIComponents(routes);
     const paths = toOpenAPIPaths(routes);
