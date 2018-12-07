@@ -20,5 +20,5 @@ export const swagger = (info: OpenAPIInfo) => {
             }
             next();
         });
-    return router as any;
+    return router;
 };

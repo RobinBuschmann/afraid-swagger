@@ -10,6 +10,8 @@ node_modules
 # build
 *.js
 *.js.map
+*.d.ts
+!lib/afraid-extension.d.ts
 
 # test
 .nyc_output

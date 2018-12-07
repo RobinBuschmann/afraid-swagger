@@ -1,0 +1,7 @@
+--require reflect-metadata
+--require ts-node/register
+--require source-map-support/register
+--recursive
+--full-trace
+
+lib/**/*.spec.ts
