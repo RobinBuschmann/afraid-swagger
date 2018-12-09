@@ -11,6 +11,7 @@ export interface OpenAPIMethod {
     parameters?: OpenAPIParameter[];
     requestBody?: OpenAPIRequestBody;
     responses?: OpenAPIResponses;
+    tags?: string[];
 }
 
 export interface OpenAPIPath {
@@ -27,6 +28,7 @@ export const toOpenAPIPaths = (routes: ExpressRoute[]): OpenAPIPaths =>
         route.stack.forEach(layer => {
             const method = path[layer.method] = path[layer.method] || {
                 operatorId: getOpenAPIOperatorId(layer.method, route.path),
+                tags: getTags(route.path),
             };
             const meta = layer.handle.meta;
             if (meta) {
@@ -56,3 +58,8 @@ const getOpenAPIOperatorId = (method: string, path: string) =>
         .split(':')
         .map(capitalize)
         .join('By');
+
+const getTags = path => path.toLowerCase()
+    .replace(getExpressRouteParamRegex(), '')
+    .split(/[\/\-]/g)
+    .filter(v => !!v);

@@ -18,8 +18,15 @@ describe('openapi.document', () => {
             class CreateUserDTO {
                 @Field name: string;
             }
+            class CreateUserProductDTO {
+                @Field name: string;
+            }
 
             class UserDTO {
+                @Field id: number;
+                @Field name: string;
+            }
+            class UserProductDTO {
                 @Field id: number;
                 @Field name: string;
             }
@@ -37,6 +44,10 @@ describe('openapi.document', () => {
             app.post('/users', [
                 body(CreateUserDTO),
                 responseBody(UserDTO),
+            ], handler);
+            app.post('/users/:id/products', [
+                body(CreateUserProductDTO),
+                responseBody(UserProductDTO),
             ], handler);
             const routes = getExpressRoutes(app);
             document = toOpenAPIDocument({version: '1', title: 'test'}, routes);
@@ -57,14 +68,20 @@ describe('openapi.document', () => {
             expect(document.paths['/users']).to.have.property('get');
             expect(document.paths['/users'].get).to.have.property('parameters').which.has.lengthOf(3);
             expect(document.paths['/users'].get).to.have.property('responses');
+            expect(document.paths['/users'].get).to.have.property('tags').that.eqls(['users']);
 
             expect(document.paths['/users']).to.have.property('post');
             expect(document.paths['/users'].post).to.have.property('requestBody');
             expect(document.paths['/users'].post).to.have.property('responses');
+            expect(document.paths['/users'].post).to.have.property('tags').that.eqls(['users']);
 
             expect(document.paths).to.have.property('/users/{id}');
             expect(document.paths['/users/{id}']).to.have.property('get');
             expect(document.paths['/users/{id}'].get).to.have.property('responses');
+            expect(document.paths['/users/{id}'].get).to.have.property('tags').that.eqls(['users']);
+
+            expect(document.paths['/users/{id}/products'].post).to.have.property('tags')
+                .that.eqls(['users', 'products']);
         });
 
         it('should return document with proper components', () => {
