@@ -41,6 +41,7 @@ describe('openapi.document', () => {
             ], handler);
 
             app.get('/users/:id', [responseBody(UserDTO)], handler);
+            app.get('/jira-issue/:id', [responseBody(UserDTO)], handler);
             app.post('/users', [
                 body(CreateUserDTO),
                 responseBody(UserDTO),
@@ -82,6 +83,9 @@ describe('openapi.document', () => {
 
             expect(document.paths['/users/{id}/products'].post).to.have.property('tags')
                 .that.eqls(['users', 'products']);
+
+            expect(document.paths['/jira-issue/{id}'].get).to.have.property('tags')
+                .that.eqls(['jira-issue']);
         });
 
         it('should return document with proper components', () => {

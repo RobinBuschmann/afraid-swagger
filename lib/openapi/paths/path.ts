@@ -61,5 +61,5 @@ const getOpenAPIOperatorId = (method: string, path: string) =>
 
 const getTags = path => path.toLowerCase()
     .replace(getExpressRouteParamRegex(), '')
-    .split(/[\/\-]/g)
+    .split('/')
     .filter(v => !!v);
