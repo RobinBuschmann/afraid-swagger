@@ -72,9 +72,6 @@ export const toJSONSchema = (meta: FieldMeta) => {
         case FieldType.boolean:
             schema = {type: 'boolean'};
             break;
-        case FieldType.string:
-            schema = {type: 'string'};
-            break;
         case FieldType.object:
             schema = {
                 type: 'object',
@@ -82,8 +79,9 @@ export const toJSONSchema = (meta: FieldMeta) => {
                 required: meta.fields ? toJSONSchemaRequiredList(meta.fields) : {},
             };
             break;
+        case FieldType.string:
         default:
-            throw new Error(`Unknown meta type "${metaType}"`);
+            schema = {type: 'string'};
     }
     schema = {...schema, ...descriptionsWrapper};
 

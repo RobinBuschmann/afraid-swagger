@@ -7,7 +7,10 @@ export interface ExpressRoute extends IRoute {
 }
 
 export interface ExpressLayer {
-    handle: SwaggerHandle & TransformerHandle;
+    handle: SwaggerHandle & TransformerHandle & ExpressRoute;
+    route: any;
+    name: string;
+    regexp: RegExp;
     keys: any[];
     method: string;
 }
