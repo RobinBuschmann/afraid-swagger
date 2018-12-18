@@ -47,7 +47,8 @@ export const toOpenAPIComponentName = (path: string, method: string, meta: Field
         .replace(getExpressRouteParamRegex(), '')
         .split(/[\/\-]/g)
         .map(capitalize)
-        .join('') + suffix;
+        .join('') + suffix + (meta.nthOneOfMany ? meta.nthOneOfMany : '')
+        ;
 };
 
 export const getOpenAPIComponentRef = (path: string, method: string, meta: FieldMeta) =>

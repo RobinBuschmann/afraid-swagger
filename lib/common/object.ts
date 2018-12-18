@@ -5,9 +5,9 @@ interface DeepAssign {
 }
 /**
  * Merges specified objects and returns new object;
- * Arrays: arrays will be concated (!not overridden)
+ * Arrays: arrays will be concatenated (!not overridden)
  * Object: merged
- * All other is overridden
+ * All others will be overridden
  */
 export const deepMerge: DeepAssign = (...objects: any[]) => {
     const mergeArrays = (target = [], source = []) => target.concat(source);

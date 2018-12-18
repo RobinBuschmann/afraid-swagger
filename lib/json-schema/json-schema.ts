@@ -57,7 +57,7 @@ const toJSONSchemaRequiredList = (meta: FieldMeta[]) =>
 
 export const toJSONSchema = (meta: FieldMeta) => {
     const metaType = meta.type;
-    const descriptionsWrapper = meta.description ? {description:meta.description} : {};
+    const descriptionsWrapper = meta.description ? {description: meta.description} : {};
     let schema;
     switch (metaType) {
         case FieldType.date:
@@ -90,4 +90,7 @@ export const toJSONSchema = (meta: FieldMeta) => {
         : schema;
 };
 
-export const toRefJSONSchema = $ref => ({$ref});
+export const toRefJSONSchema = ($ref, isOneOfMany) =>
+    isOneOfMany
+        ? {oneOf: [{$ref}]}
+        : ({$ref});

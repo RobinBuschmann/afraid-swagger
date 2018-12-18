@@ -21,8 +21,16 @@ export const toOpenAPIParameters = (rootMeta: FieldMeta): OpenAPIParameter[] => 
     return rootMeta.fields.map(meta => ({
         ...base,
         name: meta.field,
-        required: !meta.isOptional,
         schema: toJSONSchema(meta),
+
+        // If nthOneOfMany exists, we're setting all to optional,
+        // because something like the oneOf notation from body
+        // definition is not supported in OpenAPI 3;
+        // See open discussion
+        // https://github.com/OAI/OpenAPI-Specification/issues/256
+        required: !!rootMeta.nthOneOfMany
+            ? false
+            : !meta.isOptional,
     }))
 };
 

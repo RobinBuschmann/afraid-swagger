@@ -15,7 +15,12 @@ export const toOpenAPIRequestBody = (route: ExpressRoute,
                       layer: ExpressLayer,
                       meta: FieldMeta,
                       currentRequestBody: Partial<OpenAPIRequestBody> | undefined = {}) => {
-    const content = toOpenAPIContent(toRefJSONSchema(getOpenAPIComponentRef(route.path, layer.method, meta)));
+    const content = toOpenAPIContent(
+        toRefJSONSchema(
+            getOpenAPIComponentRef(route.path, layer.method, meta),
+            !!meta.nthOneOfMany,
+        )
+    );
     return deepMerge(currentRequestBody, {
         required: !meta.isOptional,
         content,
