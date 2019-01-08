@@ -1,4 +1,4 @@
-///<reference path="afraid-extension.d.ts"/>
+///<reference path="../afraid-extension.d.ts"/>
 export * from './common/string';
 export * from './common/object';
 

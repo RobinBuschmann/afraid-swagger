@@ -1,4 +1,4 @@
-///<reference path="../../afraid-extension.d.ts"/>
+///<reference path="../../../afraid-extension.d.ts"/>
 
 import {JSONSchema, toJSONSchema} from '../../json-schema/json-schema';
 import {ExpressRoute} from '../../express/types';

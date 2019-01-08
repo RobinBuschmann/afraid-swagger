@@ -13,7 +13,8 @@
     "outDir": "dist"
   },
   "include": [
-    "src"
+    "src",
+    "afraid-extension.d.ts"
   ],
   "exclude": [
     "node_modules"

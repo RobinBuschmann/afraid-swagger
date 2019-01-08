@@ -1,4 +1,4 @@
-///<reference path="../../afraid-extension.d.ts"/>
+///<reference path="../../../afraid-extension.d.ts"/>
 
 import {OpenAPIContent, toOpenAPIContent} from './content';
 import {JSONSchema, toJSONSchema, toRefJSONSchema} from '../../json-schema/json-schema';

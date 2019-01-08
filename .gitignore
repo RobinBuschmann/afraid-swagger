@@ -12,7 +12,7 @@ dist
 *.js
 *.js.map
 *.d.ts
-!src/afraid-extension.d.ts
+!afraid-extension.d.ts
 
 # test
 .nyc_output
