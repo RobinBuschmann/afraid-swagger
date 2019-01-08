@@ -18,6 +18,7 @@ describe('openapi.document', () => {
 
             class CreateUserDTO {
                 @Field name: string;
+                @Field(() => CreateUserDTO) friend: CreateUserDTO;
             }
 
             class CreateUserProductDTO {

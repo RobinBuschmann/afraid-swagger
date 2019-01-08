@@ -8,10 +8,11 @@ node_modules
 .idea
 
 # build
+dist
 *.js
 *.js.map
 *.d.ts
-!lib/afraid-extension.d.ts
+!src/afraid-extension.d.ts
 
 # test
 .nyc_output

@@ -5,4 +5,7 @@ test
 node_modules
 *.ts
 *.js.map
+*.spec.js
 !*.d.ts
+*.spec.d.ts
+src

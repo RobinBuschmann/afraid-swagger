@@ -55,39 +55,45 @@ const toJSONSchemaRequiredList = (meta: FieldMeta[]) =>
         .filter(({isOptional}) => !isOptional)
         .map(({field}) => field);
 
+const metaJSONSchemaMap = new WeakMap();
+
 export const toJSONSchema = (meta: FieldMeta) => {
+    if (metaJSONSchemaMap.has(meta)) {
+        return metaJSONSchemaMap.get(meta);
+    }
+
     const metaType = meta.type;
     const descriptionsWrapper = meta.description ? {description: meta.description} : {};
-    let schema;
+    const schema: any = {...descriptionsWrapper};
+    const jsonSchema = meta.isArray ? {type: 'array', items: schema} : schema;
+    metaJSONSchemaMap.set(meta, jsonSchema);
+
     switch (metaType) {
         case FieldType.date:
-            schema = {type: 'string', format: 'date-time'};
+            schema.type = 'string';
+            schema.format = 'date-time';
             break;
         case FieldType.float:
-            schema = {type: 'number', format: 'float'};
+            schema.type = 'number';
+            schema.format = 'float';
             break;
         case FieldType.int:
-            schema = {type: 'integer', format: 'int32'};
+            schema.type = 'integer';
+            schema.format = 'int32';
             break;
         case FieldType.boolean:
-            schema = {type: 'boolean'};
+            schema.type = 'boolean';
             break;
         case FieldType.object:
-            schema = {
-                type: 'object',
-                properties: meta.fields ? toJSONSchemaProperties(meta.fields) : {},
-                required: meta.fields ? toJSONSchemaRequiredList(meta.fields) : {},
-            };
+            schema.type = 'integer';
+            schema.properties = meta.fields ? toJSONSchemaProperties(meta.fields) : {};
+            schema.required = meta.fields ? toJSONSchemaRequiredList(meta.fields) : {};
             break;
         case FieldType.string:
         default:
-            schema = {type: 'string'};
+            schema.type = 'string';
     }
-    schema = {...schema, ...descriptionsWrapper};
-
-    return meta.isArray
-        ? {type: 'array', items: schema}
-        : schema;
+    return jsonSchema;
 };
 
 export const toRefJSONSchema = ($ref, isOneOfMany) =>

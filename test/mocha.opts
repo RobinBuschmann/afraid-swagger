@@ -4,4 +4,4 @@
 --recursive
 --full-trace
 
-lib/**/*.spec.ts
+src/**/*.spec.ts
