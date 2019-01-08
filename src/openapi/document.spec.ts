@@ -186,6 +186,7 @@ describe('openapi.document', () => {
                 expect(document).to.have.property('components');
                 expect(document.components).to.have.property('schemas');
                 expect(document.components.schemas).to.have.property('UserDTO');
+                expect(document.components.schemas.UserDTO).to.have.property('type', 'object');
                 expect(document.components.schemas).to.have.property('CreateUserDTO');
                 expect(document.components.schemas).to.have.property('UsersResp');
             });

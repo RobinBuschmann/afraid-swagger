@@ -34,7 +34,7 @@ export const toOpenAPIResponses = (route: ExpressRoute,
                                    meta: FieldMeta,
                                    currentResponses: Partial<OpenAPIResponses> | undefined = {}) => {
     const content = meta.field === 'responseBody'
-        ? toOpenAPIContent(toRefJSONSchema(getOpenAPIComponentRef(route.path, layer.method, meta), !!meta.nthOneOfMany))
+        ? toOpenAPIContent(toRefJSONSchema(getOpenAPIComponentRef(meta, route.path, layer.method), !!meta.nthOneOfMany))
         : {};
     const headers = meta.field === 'responseHeaders'
         ? toOpenAPIResponseHeaders(meta)

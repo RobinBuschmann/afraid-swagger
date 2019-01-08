@@ -1,4 +1,5 @@
 import {FieldMeta, FieldType} from 'afraid';
+import {getOpenAPIComponentRef} from '..';
 
 export type JSONSchema = RefJSONSchema |
     ObjectJSONSchema |
@@ -46,7 +47,9 @@ export interface ArrayJSONSchema extends BaseJSONSchema {
 
 const toJSONSchemaProperties = (meta: FieldMeta[]) =>
     meta.reduce((properties, meta) => {
-        properties[meta.field] = toJSONSchema(meta);
+        properties[meta.field] = meta.classRef
+            ? toRefJSONSchema(getOpenAPIComponentRef(meta))
+            : toJSONSchema(meta);
         return properties;
     }, {});
 
@@ -55,18 +58,12 @@ const toJSONSchemaRequiredList = (meta: FieldMeta[]) =>
         .filter(({isOptional}) => !isOptional)
         .map(({field}) => field);
 
-const metaJSONSchemaMap = new WeakMap();
 
 export const toJSONSchema = (meta: FieldMeta) => {
-    if (metaJSONSchemaMap.has(meta)) {
-        return metaJSONSchemaMap.get(meta);
-    }
-
     const metaType = meta.type;
     const descriptionsWrapper = meta.description ? {description: meta.description} : {};
     const schema: any = {...descriptionsWrapper};
     const jsonSchema = meta.isArray ? {type: 'array', items: schema} : schema;
-    metaJSONSchemaMap.set(meta, jsonSchema);
 
     switch (metaType) {
         case FieldType.date:
@@ -85,7 +82,7 @@ export const toJSONSchema = (meta: FieldMeta) => {
             schema.type = 'boolean';
             break;
         case FieldType.object:
-            schema.type = 'integer';
+            schema.type = 'object';
             schema.properties = meta.fields ? toJSONSchemaProperties(meta.fields) : {};
             schema.required = meta.fields ? toJSONSchemaRequiredList(meta.fields) : {};
             break;
@@ -96,7 +93,7 @@ export const toJSONSchema = (meta: FieldMeta) => {
     return jsonSchema;
 };
 
-export const toRefJSONSchema = ($ref, isOneOfMany) =>
+export const toRefJSONSchema = ($ref, isOneOfMany = false) =>
     isOneOfMany
         ? {oneOf: [{$ref}]}
         : ({$ref});

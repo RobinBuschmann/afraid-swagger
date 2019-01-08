@@ -19,8 +19,7 @@ export const toOpenAPIComponents = (routes: ExpressRoute[]) => {
         route.stack.forEach(layer => {
             const meta = layer.handle.meta;
             if (meta && (meta.field === 'body' || meta.field === 'responseBody')) {
-                schemas[toOpenAPIComponentName(route.path, layer.method, meta)] =
-                    toJSONSchema(meta);
+                schemas = {...schemas, ...getAllOpenAPIComponents(meta, route.path, layer.method)};
             }
         });
         return schemas;
@@ -28,10 +27,30 @@ export const toOpenAPIComponents = (routes: ExpressRoute[]) => {
     return {schemas};
 };
 
-export const toOpenAPIComponentName = (path: string, method: string, meta: FieldMeta) => {
+const metaMemMap = new WeakMap();
+
+const getAllOpenAPIComponents = (meta: FieldMeta, path?: string, method?: string) => {
+    metaMemMap.set(meta, true);
+    return {
+        [toOpenAPIComponentName(meta, path, method)]: toJSONSchema(meta),
+        ...(meta.fields || []).reduce((acc, _meta) => {
+            if (_meta.classRef && !metaMemMap.get(meta)) {
+                return {...acc, ...getAllOpenAPIComponents(_meta)};
+            }
+            return acc;
+        }, {}),
+    };
+};
+
+export const toOpenAPIComponentName = (meta: FieldMeta, path?: string, method?: string) => {
     if (meta.classRef && meta.classRef.name) {
         return meta.classRef.name;
     }
+
+    if (!path || !method) {
+        throw new Error(`Parameters missing: path and method are required`);
+    }
+
     const methodMap = {
         post: 'create',
         put: 'update',
@@ -51,6 +70,6 @@ export const toOpenAPIComponentName = (path: string, method: string, meta: Field
         ;
 };
 
-export const getOpenAPIComponentRef = (path: string, method: string, meta: FieldMeta) =>
-    `#/components/schemas/${toOpenAPIComponentName(path, method, meta)}`;
+export const getOpenAPIComponentRef = (meta: FieldMeta, path?: string, method?: string) =>
+    `#/components/schemas/${toOpenAPIComponentName(meta, path, method)}`;
 

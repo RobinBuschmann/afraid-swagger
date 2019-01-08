@@ -17,7 +17,7 @@ export const toOpenAPIRequestBody = (route: ExpressRoute,
                       currentRequestBody: Partial<OpenAPIRequestBody> | undefined = {}) => {
     const content = toOpenAPIContent(
         toRefJSONSchema(
-            getOpenAPIComponentRef(route.path, layer.method, meta),
+            getOpenAPIComponentRef(meta, route.path, layer.method),
             !!meta.nthOneOfMany,
         )
     );
